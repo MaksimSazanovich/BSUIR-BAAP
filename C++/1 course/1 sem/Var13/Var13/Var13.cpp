@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 #include<cmath>
 #include<string.h>
-#include<cstring>
 
 using namespace std;
 
@@ -154,7 +153,7 @@ int Lab6()
 	char str[100] = "qw k hh lk";
 	int n;
 	int len = 0;
-
+	gets_s(str);
 	n = strlen(str);
 
 	for (int i = 0; i < n; i++)
