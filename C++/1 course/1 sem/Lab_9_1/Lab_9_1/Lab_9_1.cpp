@@ -102,14 +102,11 @@ int try_create_file_with_same_name(file_type type)
 		case Binary:
 		{
 			fopen_s(&file, file_name, "wb+");
-			//fclose(file);
 		}
 		break;
 		case Text:
 		{
-			//strcat_s(result_file_name, ".txt");
 			fopen_s(&result_file, result_file_name, "w+");
-
 		}
 
 		break;
@@ -211,7 +208,7 @@ int enter_in_file()
 
 				cin >> k;
 				strcpy_s(cur_book.author_surname, k);
-				cout << get_chars_in_str(dlm, cur_book.author_surname);
+				//cout << get_chars_in_str(dlm, cur_book.author_surname);
 				if ((isupper(cur_book.author_surname[0]) == false || !strcmp(k, " ")))
 				{
 					cout << "The author's surname of the book must begin with an upper letter" << endl;

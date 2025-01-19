@@ -32,7 +32,7 @@ int main()
        
         cout << "Input title " << i + 1 << " book: ";
         cin >> book_list[i].title;
-
+        
         cout << "Input author surname of " << i + 1 << " book: ";
         cin >> book_list[i].author_surname;
 
@@ -78,5 +78,8 @@ int main()
             cout << book_list[i].title << endl;
         }
     }
+
+    delete[] book_list;
+    book_list = NULL;
 }
 
