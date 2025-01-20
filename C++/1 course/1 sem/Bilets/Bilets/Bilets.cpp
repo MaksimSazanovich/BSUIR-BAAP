@@ -5,10 +5,12 @@ using namespace std;
 
 int B6();
 int B21();
+int Danya();
 
 int main()
 {
-	B21();
+	Danya();
+
 	return 0;
 }
 
@@ -139,28 +141,10 @@ int B21()
 		}
 		cout << endl;
 	}
-	cout << endl;
-	int temp;
-	for (int i = 0; i < n-1; i++)
+
+	for (int i = 0; i < n - 1; i++)
 	{
-		for (int j = i+1; j < n; j++)
-		{
-			temp = a[i][j];
-			a[i][j] = a[j][i];
-			a[j][i] = temp;
-		}
-	}
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			cout << a[i][j] << " ";
-		}
-		cout << endl;
-	}
-	/*for (int i = 0; i < n-1; i++)
-	{
-		for (int j = i+1; j < n; j++)
+		for (int j = i + 1; j < n; j++)
 		{
 			if (a[i][j] > 0)
 			{
@@ -171,14 +155,14 @@ int B21()
 
 	cout << "sum " << sum << endl;
 
-	
+
 	int* b = new int[n];
 	bool is_upper = true;
 
 	for (int i = 0; i < n; i++)
 	{
 		is_upper = true;
-		for (int j = 0; j < n-1; j++)
+		for (int j = 0; j < n - 1; j++)
 		{
 			if (a[j][i] >= a[j + 1][i])
 			{
@@ -195,6 +179,53 @@ int B21()
 	}
 
 
-	delete[] b;*/
+	delete[] b;
+	return 0;
+}
+
+int Danya()
+{
+	int n;
+	cin >> n;
+
+	double* a = new double[n];
+	double sr = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		sr += a[i] / (double)n;
+		if (a[i] < 0)
+			a[i] *= 2;
+	}
+
+	cout << "sr " << sr << endl;
+	sr = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+
+	double sum = 0;
+	for (int i = 0; i < n; i++)
+	{
+		sum += a[i];
+		if (i % 2 == 0 && i>0)
+			a[i] = (sum-a[i])/i;
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+
+	delete[] a;
 	return 0;
 }
