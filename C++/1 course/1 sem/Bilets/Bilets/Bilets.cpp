@@ -6,10 +6,10 @@ using namespace std;
 int B6();
 int B21();
 int Danya();
-
+int tby();
 int main()
 {
-	Danya();
+	tby();
 
 	return 0;
 }
@@ -227,5 +227,23 @@ int Danya()
 	cout << endl;
 
 	delete[] a;
+	return 0;
+}
+
+int tby()
+{
+	char str[100];
+	char* cn, * wrd;
+	char dlm[] = " ";
+	gets_s(str);
+	wrd = strtok_s(str, dlm, &cn);
+	while (wrd != NULL)
+	{
+		if (wrd[0] == 't')
+			puts(wrd);
+		if (strstr(wrd, "by") && wrd[strlen(wrd)] == '\0')
+			puts(wrd);
+		wrd = strtok_s(NULL, dlm, &cn);
+	}
 	return 0;
 }
