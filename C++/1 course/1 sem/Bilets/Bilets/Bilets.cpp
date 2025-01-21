@@ -9,9 +9,11 @@ int Danya();
 int tby();
 int old36();
 int Roma();
+int old33();
+
 int main()
 {
-	Roma();
+	old33();
 
 	return 0;
 }
@@ -261,15 +263,57 @@ int old36()
 	};
 
 	int n;
-	cout << "Enter amount of products";
+	cout << "Enter amount of products " << endl;
 	cin >> n;
 	product* products = new product[n];
 	for (int i = 0; i < n; i++)
 	{
-		cout << "Enter the name of product " << i + 1 << " :";
-
+		cout << "Enter the name of product " << i + 1 << ": ";
+		cin >> products[i].name;
+		cout << "Enter amount of " << products[i].name << ": ";
+		cin >> products[i].amount;
+		cout << "Enter price for one " << products[i].name << ": ";
+		cin >> products[i].price;
+		cout << "Enter the date of arriving (1--31): ";
+		cin >> products[i].date;
+		if (products[i].date < 1 || products[i].date > 31)
+		{
+			cout << "Date input error!";
+			return 1;
+		}
 	}
 
+	for (int i = 0; i < n; i++)
+	{
+		if (products[i].date >= 8 && products[i].date <= 18)
+			cout << products[i].name << endl;
+	}
+
+	cout << "Ex2" << endl;
+	int cur_date;
+	cout << "Enter date: ";
+	cin >> cur_date;
+	product tmp;
+	for (int i = 0; i < n-1; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (products[i].price > products[j].price && products[i].date - cur_date > 8 && products[j].date - cur_date > 8)
+			{
+				tmp = products[i];
+				products[i] = products[j];
+				products[j] = tmp;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		if (products[i].date - cur_date > 8)
+			cout << products[i].name << endl;
+	}
+
+	delete[] products;
 	return 0;
 }
 
@@ -294,5 +338,50 @@ int Roma()
 		}
 		cout << y << "   " << s << endl;
 	}
+	return 0;
+}
+
+int old33()
+{
+	int n;
+	cin >> n;
+	int* a = new int[n];
+	for (int i = 0; i < n; i++)
+	{
+		cout << "a[" << i << "]: ";
+		cin >> a[i];
+	}
+	int sum = 0;
+	for (int i = 0; i < n; i++)
+	{
+		if (a[i] < 0)
+			sum += a[i];
+		if (a[i] % 2 == 0)
+			a[i] += 5;
+		cout << a[i] << " ";
+	}
+	cout << endl;
+	cout << "sum " << sum << endl;
+
+	int tmp;
+	for (int i = 0; i < n; i++)
+	{
+		if (a[i] < 0)
+		{
+			for (int j = i-1; j >= 0 && a[j] >= 0; j--)
+			{
+				tmp = a[j];
+				a[j] = a[j + 1];
+				a[j + 1] = tmp;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		cout << a[i] << " ";
+	}
+
+	delete[] a;
 	return 0;
 }
