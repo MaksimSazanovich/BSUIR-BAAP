@@ -7,9 +7,11 @@ int B6();
 int B21();
 int Danya();
 int tby();
+int old36();
+int Roma();
 int main()
 {
-	tby();
+	Roma();
 
 	return 0;
 }
@@ -216,8 +218,8 @@ int Danya()
 	for (int i = 0; i < n; i++)
 	{
 		sum += a[i];
-		if (i % 2 == 0 && i>0)
-			a[i] = (sum-a[i])/i;
+		if (i % 2 == 0 && i > 0)
+			a[i] = (sum - a[i]) / i;
 	}
 
 	for (int i = 0; i < n; i++)
@@ -244,6 +246,53 @@ int tby()
 		if (strstr(wrd, "by") && wrd[strlen(wrd)] == '\0')
 			puts(wrd);
 		wrd = strtok_s(NULL, dlm, &cn);
+	}
+	return 0;
+}
+
+int old36()
+{
+	struct product
+	{
+		char name[100];
+		int amount;
+		float price;
+		int date;
+	};
+
+	int n;
+	cout << "Enter amount of products";
+	cin >> n;
+	product* products = new product[n];
+	for (int i = 0; i < n; i++)
+	{
+		cout << "Enter the name of product " << i + 1 << " :";
+
+	}
+
+	return 0;
+}
+
+int Roma()
+{
+	double x, y, a, b, s, h, an=1;
+	int n = 853;
+
+	a = 1;
+	b = 3;
+	h = (b - a) / 10;
+
+	for (x = a; x<b+h/2; x += h)
+	{
+		an = 1;
+		s = 0;
+		y = log(1 / (2 + 2 * x + x * x));
+		for (int m = 1; m < n; m++)
+		{
+			an *= (-1) * (x + 1) * (x + 1);
+			s += an / m;
+		}
+		cout << y << "   " << s << endl;
 	}
 	return 0;
 }
