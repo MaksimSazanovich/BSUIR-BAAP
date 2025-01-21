@@ -10,10 +10,11 @@ int tby();
 int old36();
 int Roma();
 int old33();
+int B67();
 
 int main()
 {
-	old33();
+	B67();
 
 	return 0;
 }
@@ -294,7 +295,7 @@ int old36()
 	cout << "Enter date: ";
 	cin >> cur_date;
 	product tmp;
-	for (int i = 0; i < n-1; i++)
+	for (int i = 0; i < n - 1; i++)
 	{
 		for (int j = 0; j < n; j++)
 		{
@@ -319,14 +320,14 @@ int old36()
 
 int Roma()
 {
-	double x, y, a, b, s, h, an=1;
+	double x, y, a, b, s, h, an = 1;
 	int n = 853;
 
 	a = 1;
 	b = 3;
 	h = (b - a) / 10;
 
-	for (x = a; x<b+h/2; x += h)
+	for (x = a; x < b + h / 2; x += h)
 	{
 		an = 1;
 		s = 0;
@@ -368,7 +369,7 @@ int old33()
 	{
 		if (a[i] < 0)
 		{
-			for (int j = i-1; j >= 0 && a[j] >= 0; j--)
+			for (int j = i - 1; j >= 0 && a[j] >= 0; j--)
 			{
 				tmp = a[j];
 				a[j] = a[j + 1];
@@ -383,5 +384,62 @@ int old33()
 	}
 
 	delete[] a;
+	return 0;
+}
+
+int B67()
+{
+	char str[100];
+	char dlm[] = " ";
+	char* wrd, * cn;
+	gets_s(str);
+	int len = strlen(str);
+	wrd = strtok_s(str, dlm, &cn);
+	while (wrd != NULL)
+	{
+		if (wrd[0] == 's')
+			puts(wrd);
+		wrd = strtok_s(NULL, dlm, &cn);
+	}
+	
+
+	for (int i = 0; i < len; i++)
+	{
+		if (str[i] == '\0')
+			str[i] = ' ';
+	}
+	
+	char pascal[] = "Pascal";
+	char c[] = "C++";
+	int counter = 0;
+	int c_len = strlen(c);
+	int pascal_len = strlen(pascal);
+
+	for (int i = 0; i < len; i++)
+	{
+		if (str[i] == pascal[counter++] && counter == pascal_len)
+		{
+			counter = 0;
+			for (int j = i - pascal_len + 1; j < i - c_len + 1; j++)
+			{
+				str[j] = c[counter++];
+			}
+
+			for (int j = i-c_len+1; j < i+1; j++)
+			{
+				for (int k = i - c_len + 2; k <= len; k++)
+				{
+					str[k - 1] = str[k];
+				}
+				len--;
+			}
+		}
+
+		else if (str[i + 1] != pascal[counter])
+		{
+			counter = 0;
+		}
+	}
+	puts(str);
 	return 0;
 }
