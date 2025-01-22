@@ -11,10 +11,11 @@ int old36();
 int Roma();
 int old33();
 int B67();
+int B28();
 
 int main()
 {
-	B67();
+	B28();
 
 	return 0;
 }
@@ -401,14 +402,14 @@ int B67()
 			puts(wrd);
 		wrd = strtok_s(NULL, dlm, &cn);
 	}
-	
+
 
 	for (int i = 0; i < len; i++)
 	{
 		if (str[i] == '\0')
 			str[i] = ' ';
 	}
-	
+
 	char pascal[] = "Pascal";
 	char c[] = "C++";
 	int counter = 0;
@@ -425,7 +426,7 @@ int B67()
 				str[j] = c[counter++];
 			}
 
-			for (int j = i-c_len+1; j < i+1; j++)
+			for (int j = i - c_len + 1; j < i + 1; j++)
 			{
 				for (int k = i - c_len + 2; k <= len; k++)
 				{
@@ -441,5 +442,97 @@ int B67()
 		}
 	}
 	puts(str);
+	return 0;
+}
+
+int B28()
+{
+	FILE* fl, * fl2;
+	char file_name[100] = "file";
+	char file_name2[100] = "file2";
+	char str[100];
+	char str2[100] = "\0";
+	char str3[100] = "\0";
+
+	gets_s(str);
+
+	if (fopen_s(&fl, file_name, "w+t"))
+	{
+		cout << "Error creating 1";
+		return 1;
+	}
+
+
+	fprintf(fl, "%s", str);
+	rewind(fl);
+	fread(str2, sizeof(char) * 100, 1, fl);
+	puts(str2);
+
+
+	if (fopen_s(&fl2, file_name2, "w+t"))
+	{
+		cout << "Error creating 2";
+		return 2;
+	}
+	fread(str2, sizeof(char) * 100, 1, fl);
+
+	fprintf(fl2, "%s", str2);
+
+	rewind(fl2);
+	//Удалить слова из 5 букв 
+	int n = _filelength(_fileno(fl2)) / sizeof(char);
+	char ch;
+	char next_ch;
+	int counter = 0;
+	for (int i = 0; i < n; i++)
+	{
+		rewind(fl2);
+		fseek(fl2, sizeof(char) * i, SEEK_SET);
+		fread(&ch, sizeof(char), 1, fl2);
+		rewind(fl2);
+		fseek(fl2, sizeof(char) * (i + 1), SEEK_SET);
+		fread(&next_ch, sizeof(char), 1, fl2);
+		/*cout << ch;
+		cout << next_ch;*/
+		if (ch != ' ')
+		{
+			counter++;
+			if (counter == 5 && (next_ch == ' ' || i == n - 1))
+			{
+
+				for (int j = 0; j < counter; j++)
+				{
+
+					for (int k = i + 2 - counter; k < n; k++)
+					{
+						rewind(fl2);
+						fseek(fl2, sizeof(char) * k, SEEK_SET);
+						fread(&next_ch, sizeof(char), 1, fl2);
+
+						rewind(fl2);
+						fseek(fl2, sizeof(char) * (k - 1), SEEK_SET);
+						fprintf(fl2, "%c", next_ch);
+					}
+					n--;
+				}
+				i--;
+				_chsize(_fileno(fl2), sizeof(char) * n);
+
+				counter = 0;
+			}
+
+		}
+		else
+		{
+			counter = 0;
+		}
+	}
+
+	rewind(fl2);
+	fread(str3, sizeof(char) * n, 1, fl2);
+	puts(str3);
+
+	fclose(fl);
+	fclose(fl2);
 	return 0;
 }
