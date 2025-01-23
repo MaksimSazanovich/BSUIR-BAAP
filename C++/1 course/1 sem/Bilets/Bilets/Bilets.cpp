@@ -38,7 +38,7 @@ int B42()
 	gets_s(str);
 	fwrite(str, sizeof(char), strlen(str) + 1, fl);
 	//fprintf(fl, "%s", str);
-	rewind(fl);
+	fflush(fl);
 	int n = _filelength(_fileno(fl)) / sizeof(char);
 	int counter = 0;
 	char ch;
