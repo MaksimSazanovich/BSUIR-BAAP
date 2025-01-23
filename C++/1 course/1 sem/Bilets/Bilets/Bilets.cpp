@@ -5,6 +5,7 @@ using namespace std;
 
 int B6();
 int B21();
+int B42();
 int Danya();
 int tby();
 int old36();
@@ -12,11 +13,88 @@ int Roma();
 int old33();
 int B67();
 int B28();
+int B23Slava();
+int B24();
+int Lesha();
+int B42();
 
 int main()
 {
-	B28();
+	return B42();
+}
 
+int B42()
+{
+	FILE* fl;
+	char file_name[100];
+	cout << "Vvidite file name: " << endl;
+	gets_s(file_name);
+	if (fopen_s(&fl, file_name, "wt+"))
+	{
+		return 1;
+	}
+	char str[100];
+	cout << "Vvedite stroku " << endl;
+	gets_s(str);
+	fwrite(str, sizeof(char), strlen(str) + 1, fl);
+	//fprintf(fl, "%s", str);
+	rewind(fl);
+	int n = _filelength(_fileno(fl)) / sizeof(char);
+	int counter = 0;
+	char ch;
+	char next_ch;
+	char wrd_ch = NULL;
+	int ch_counter = 0;
+	int need_counter;
+	for (int i = 0; i < n - 1; i++)
+	{
+		fseek(fl, sizeof(char) * i, SEEK_SET);
+		fread(&ch, sizeof(char), 1, fl);
+
+		fseek(fl, sizeof(char) * (i + 1), SEEK_SET);
+		fread(&next_ch, sizeof(char), 1, fl);
+		if (ch != ' ' && (next_ch == ' ' || next_ch == '\0'))
+		{
+			counter++;
+		}
+		if ((ch == ' ' || i == 0) && (next_ch != ' ' && next_ch != '\0'))
+		{
+			if (ch == ' ')
+				wrd_ch = next_ch;
+			if (i == 0 && ch != ' ')
+				wrd_ch = ch;
+			need_counter = (i == 0 && ch != ' ') ? 3 : 4;
+			ch_counter++;
+		}
+		else if (wrd_ch != NULL)
+		{
+			if (ch == wrd_ch)
+			{
+				fseek(fl, sizeof(char) * (i + 2), SEEK_SET);
+				fread(&next_ch, sizeof(char), 1, fl);
+				ch_counter++;
+				if (ch_counter == need_counter && (next_ch == ' ' || next_ch == '\0'))
+				{
+					wrd_ch = NULL;
+					ch_counter = 0;
+					for (int j = i - 2; j <= i; j++)
+					{
+						fseek(fl, sizeof(char) * j, SEEK_SET);
+						fread(&ch, sizeof(char), 1, fl);
+						cout << ch;
+					}
+					cout << endl;
+				}
+			}
+			else
+			{
+				wrd_ch = NULL;
+				ch_counter = 0;
+			}
+		}
+	}
+	cout << "Kolvo slov " << counter << endl;
+	fclose(fl);
 	return 0;
 }
 
@@ -458,6 +536,7 @@ int B28()
 
 	if (fopen_s(&fl, file_name, "w+t"))
 	{
+
 		cout << "Error creating 1";
 		return 1;
 	}
@@ -499,27 +578,28 @@ int B28()
 			counter++;
 			if (counter == 5 && (next_ch == ' ' || i == n - 1))
 			{
-
 				for (int j = 0; j < counter; j++)
 				{
 
-					for (int k = i + 2 - counter; k < n; k++)
+					for (int k = i + 1 - counter; k < n; k++)
 					{
 						rewind(fl2);
-						fseek(fl2, sizeof(char) * k, SEEK_SET);
+						fseek(fl2, sizeof(char) * k + 1, SEEK_SET);
 						fread(&next_ch, sizeof(char), 1, fl2);
 
 						rewind(fl2);
-						fseek(fl2, sizeof(char) * (k - 1), SEEK_SET);
+						fseek(fl2, sizeof(char) * (k), SEEK_SET);
 						fprintf(fl2, "%c", next_ch);
 					}
 					n--;
 				}
-				i--;
+				i -= counter;
 				_chsize(_fileno(fl2), sizeof(char) * n);
 
 				counter = 0;
+
 			}
+
 
 		}
 		else
@@ -534,5 +614,125 @@ int B28()
 
 	fclose(fl);
 	fclose(fl2);
+	return 0;
+}
+
+int B23Slava()
+{
+	FILE* fl;
+	char file_name[100];
+	char str[100];
+
+	cout << "Vvedite imya fayla" << endl;
+	gets_s(file_name);
+	if (fopen_s(&fl, file_name, "wb+"))
+	{
+		cout << "Error create" << endl;
+		return 1;
+	}
+
+	cout << "Vvedite strochenku " << endl;
+	gets_s(str);
+	int n = strlen(str) + 1;
+	fwrite(str, sizeof(char), n, fl);
+
+	char ch;
+	char w = 'w';
+	int counter = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		fseek(fl, sizeof(char) * i, SEEK_SET);
+		fread(&ch, sizeof(char), 1, fl);
+		if (ch == 'z' || ch == 'Z')
+		{
+			counter++;
+			n++;
+			_chsize(_fileno(fl), sizeof(char) * n);
+			for (int k = n - 2; k > i; k--)
+			{
+				fseek(fl, sizeof(char) * k, SEEK_SET);
+				fread(&ch, sizeof(char), 1, fl);
+				fseek(fl, sizeof(char) * (k + 1), SEEK_SET);
+				fwrite(&ch, sizeof(char), 1, fl);
+			}
+			rewind(fl);
+			fseek(fl, sizeof(char) * (i + 1), SEEK_SET);
+			//fwrite(&w, sizeof(char), 1, fl);
+			fputc('w', fl);
+		}
+	}
+
+	cout << "count " << counter << endl;
+	rewind(fl);
+	char str2[200];
+	fread(str2, sizeof(char), n, fl);
+	puts(str2);
+	fclose(fl);
+	return 0;
+}
+
+int B24()
+{
+	int n;
+	cin >> n;
+	int* a = new int[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
+	for (int i = 0; i < n; i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+	int k = n / 2 - 1;
+
+	for (int i = k; i > 0; i--)
+	{
+		for (int j = i - 1; j < n; j++)
+		{
+			a[j - 1] = a[j];
+		}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		cout << a[i] << " ";
+	}
+
+	delete[] a;
+	return 0;
+}
+
+int Lesha()
+{
+	char str[100];
+	char svo[] = "svo";
+	char zov[] = "zov";
+	gets_s(str);
+	int n = strlen(str);
+	
+	char space[] = "   ";
+	for (int i = 0; i < n; i++)
+	{
+		if (strncmp(&str[i], svo, 3) == 0)
+		{
+			
+			strcat_s(str, space);
+			n += 3;
+			for (int j = n-1; j > i + 3; j--)
+			{
+				str[j] = str[j - 3];
+			}
+			
+			for (int k = 0; k < 3; k++)
+			{
+				str[i + 3 + k] = zov[k];
+			}
+			
+		}
+	}
+	puts(str);
 	return 0;
 }
