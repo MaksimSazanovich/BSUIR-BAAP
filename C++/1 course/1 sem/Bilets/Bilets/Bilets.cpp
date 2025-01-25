@@ -20,7 +20,14 @@ int B42();
 
 int main()
 {
-	return B42();
+	char str[] = "a      g";
+	char dlm[] = " ";
+	char* wrd, *cn;
+
+	wrd = strtok_s(str, dlm, &cn);
+	cout << (str[1] == '\0') << endl;
+	cout << (str[2] == '\0') << endl;
+	cout << (str[2] == ' ') << endl;
 }
 
 int B42()
@@ -154,48 +161,51 @@ int B6()
 
 	rewind(fl);
 	int min, max, cur;
-	long min_p, max_p;
-	min_p = max_p = ftell(fl);
+	int min_i, max_i;
+	min_i = max_i = 0;
 
+	rewind(fl);
 	fread(&cur, sizeof(int), 1, fl);
 	min = max = cur;
-
-
+	
+	fflush(fl);
 	n = _filelength(_fileno(fl)) / sizeof(int);
 	for (int i = 1; i < n; i++)
 	{
+		fseek(fl, sizeof(int) * i, SEEK_SET);
 		fread(&cur, sizeof(int), 1, fl);
 		if (min > cur)
 		{
 			min = cur;
-			min_p = ftell(fl);
+			min_i = i;
 		}
 		if (max < cur)
 		{
 			max = cur;
-			max_p = ftell(fl);
+			max_i = i;
 		}
 	}
 
-	rewind(fl);
 	for (int i = 0; i < n; i++)
 	{
+		fseek(fl, sizeof(int) * i, SEEK_SET);
 		fread(&cur, sizeof(int), 1, fl);
 		cout << cur << " ";
 	}
 	cout << endl;
 
 
-	fseek(fl, min_p - sizeof(int), SEEK_SET);
+	fseek(fl, min_i * sizeof(int), SEEK_SET);
 	fwrite(&max, sizeof(int), 1, fl);
 
-	fseek(fl, max_p - sizeof(int), SEEK_SET);
+	fseek(fl, max_i * sizeof(int), SEEK_SET);
 	fwrite(&min, sizeof(int), 1, fl);
 
 
-
+	
 	for (int i = 0; i < n; i++)
 	{
+		fseek(fl, sizeof(int) * i, SEEK_SET);
 		fread(&cur, sizeof(int), 1, fl);
 		cout << cur << " ";
 	}
@@ -712,25 +722,25 @@ int Lesha()
 	char zov[] = "zov";
 	gets_s(str);
 	int n = strlen(str);
-	
+
 	char space[] = "   ";
 	for (int i = 0; i < n; i++)
 	{
 		if (strncmp(&str[i], svo, 3) == 0)
 		{
-			
+
 			strcat_s(str, space);
 			n += 3;
-			for (int j = n-1; j > i + 3; j--)
+			for (int j = n - 1; j > i + 3; j--)
 			{
 				str[j] = str[j - 3];
 			}
-			
+
 			for (int k = 0; k < 3; k++)
 			{
 				str[i + 3 + k] = zov[k];
 			}
-			
+
 		}
 	}
 	puts(str);
