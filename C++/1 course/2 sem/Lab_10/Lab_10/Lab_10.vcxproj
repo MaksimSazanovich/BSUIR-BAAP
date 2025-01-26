@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f3b4ea0b-7d92-496b-bd83-298c80c01cdc}</ProjectGuid>
+    <ProjectGuid>{be98d923-3b1a-43c6-a413-5c264aaa3048}</ProjectGuid>
     <RootNamespace>Lab10</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
