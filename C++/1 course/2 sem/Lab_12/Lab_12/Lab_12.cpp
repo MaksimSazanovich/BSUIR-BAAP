@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include<io.h>
 #include<string.h>
-#include<cctype>
 
 using namespace std;
 
@@ -20,18 +19,14 @@ enum options
 
 enum file_type
 {
-	Binary,
-	Text
+	Binary = 0,
+	Text = 1
 };
 
-enum sort_type
+enum search_type
 {
-	BubbleSort = 1,
-	QuickSort = 2,
-	SelectionSort = 3,
-	InsertionSort = 4,
-	CocktailSort = 5,
-	ShellSort = 6
+	LinearSearch = 1,
+	BinarySearch = 2
 };
 
 FILE* file = NULL, * result_file = NULL;
@@ -49,17 +44,13 @@ struct book
 
 int n;
 
-bool is_sorted = false;
-
 book* get_book_list();
-book* (*get_book_sort(sort_type sort_type))();
+char* (*get_book_search(search_type sort_type))();
 
-book* get_sort_book_list_in_alphabet();
+char* search_book_linear();
+char* search_book_binary();
+
 book* get_sort_book_list_quick_sort();
-book* get_sort_book_list_selection_sort();
-book* get_sort_book_list_insertion_sort();
-
-
 void quick_sort(book* array, int min_index, int max_index);
 int get_pivot_index(book* array, int min_index, int max_index);
 void swap(book& a, book& b);
@@ -73,9 +64,9 @@ void handle_missing_file();
 int create_file();
 int enter_in_file();
 int open_and_read_file();
-void choose_sort_type(options result);
-int show_result_on_screen(sort_type);
-int show_result_in_file(sort_type);
+void choose_search_type(options result);
+int show_result_on_screen(search_type);
+int show_result_in_file(search_type);
 void delete_files();
 int open_menu();
 
@@ -355,27 +346,38 @@ int open_and_read_file()
 
 }
 
-book* get_sort_book_list_in_alphabet()
+char* search_book_linear()
 {
 	book* book_list = get_book_list();
-	if (book_list == NULL)
-		return NULL;
-
-	book temp;
-	for (int i = 0; i < n - 1; i++)
+	for (int i = 0; i < n; i++)
 	{
-		for (int j = i + 1; j < n; j++)
+		if (book_list[i].count_pages == 1575)
 		{
-			if (strcmp(book_list[i].title, book_list[j].title) == 1 && book_list[i].year < 1990 && book_list[j].year < 1990)
-			{
-				temp = book_list[i];
-				book_list[i] = book_list[j];
-				book_list[j] = temp;
-			}
+			return book_list[i].title;
 		}
 	}
+	delete[] book_list;
+	return nullptr;
+}
 
-	return book_list;
+char* search_book_binary()
+{
+	book* book_list = get_sort_book_list_quick_sort();
+	int mid = 0;
+	int low = 0, high = n - 1;
+	while(book_list[mid].count_pages != 1575)
+	{
+		mid = (low + high) / 2;
+		if (1575 < book_list[mid].count_pages)
+		{
+			high = mid - 1;
+		}
+		else if (1575 > book_list[mid].count_pages)
+		{
+			low = mid + 1;
+		}
+	}
+	return book_list[mid].title;
 }
 
 book* get_sort_book_list_quick_sort()
@@ -423,124 +425,76 @@ void swap(book& a, book& b)
 	b = temp;
 }
 
-book* get_sort_book_list_selection_sort()
-{
-	book* book_list = get_book_list();
-	if (book_list == NULL)
-		return NULL;
-
-	int min;
-
-	for (int i = 0; i < n; i++)
-	{
-		min = i;
-		for (int j = i + 1; j < n; j++)
-		{
-			if (book_list[j].count_pages < book_list[min].count_pages)
-			{
-				min = j;
-			}
-		}
-		swap(book_list[i], book_list[min]);
-	}
-	return book_list;
-}
-
-book* get_sort_book_list_insertion_sort()
-{
-	book* book_list = get_book_list();
-	if (book_list == NULL)
-		return NULL;
-
-	int index;
-	book cur_book;
-
-	for (int i = 0; i < n; i++)
-	{
-		index = i;
-		cur_book = book_list[i];
-
-		while (index > 0 && cur_book.count_pages < book_list[index - 1].count_pages)
-		{
-			book_list[index] = book_list[index - 1];
-			index--;
-		}
-		book_list[index] = cur_book;
-	}
-
-	return book_list;
-}
-
-void choose_sort_type(options result)
+void choose_search_type(options result)
 {
 	char k[100] = " ";
-	int cur_sort_type = 0;
-	while ((cur_sort_type < (int)BubbleSort || cur_sort_type >(int)InsertionSort) || !strcmp(k, " "))
+	int cur_search_type = 0;
+	while ((cur_search_type < (int)LinearSearch || cur_search_type >(int)BinarySearch) || !strcmp(k, " "))
 	{
-		cout << "Choose sort type: " << endl;
-		cout << "1) Bubble sort (in alphabetical order)\n"
-			 << "2) QuickSort (in non - decreasing order of number of pages)\n"
-			 << "3) Selection sort (in non - decreasing order of number of pages)\n"
-			 << "4) Insertion sort (in non - decreasing order of number of pages)" << endl;
+		cout << "Choose find type: " << endl;
+		cout << "1) Linear\n"
+			<< "2) Binary"
+		    << endl;
 		cin >> k;
-		cur_sort_type = atoi(k);
-		if ((cur_sort_type < (int)BubbleSort || cur_sort_type >(int)InsertionSort) || !strcmp(k, " "))
+		cur_search_type = atoi(k);
+		if ((cur_search_type < (int)LinearSearch || cur_search_type >(int)BinarySearch) || !strcmp(k, " "))
 			cout << "Wrong input" << endl;
 	}
 	switch (result)
 	{
 	case ShowResultOnScreen:
-		show_result_on_screen(static_cast<sort_type>(cur_sort_type));
+		show_result_on_screen(static_cast<search_type>(cur_search_type));
 		break;
 	case ShowResultInFile:
-		show_result_in_file(static_cast<sort_type>(cur_sort_type));
+		show_result_in_file(static_cast<search_type>(cur_search_type));
 		break;
 	}
 }
 
-book* (*get_book_sort(sort_type sort_type))()
+char* (*get_book_search(search_type search_type))()
 {
-	switch (sort_type)
+	switch (search_type)
 	{
-	case BubbleSort:
-		return &get_sort_book_list_in_alphabet;
-	case QuickSort:
-		return &get_sort_book_list_quick_sort;
-	case SelectionSort:
-		return &get_sort_book_list_selection_sort;
-	case InsertionSort:
-		return &get_sort_book_list_insertion_sort;
+	case LinearSearch:
+		return &search_book_linear;
+	case BinarySearch:
+		return &search_book_binary;
 	}
 }
 
-int show_result_on_screen(sort_type sort_type)
+int show_result_on_screen(search_type search_type)
 {
-	book* (*get_sort_book_function)();
+	char* (*get_search_book_function)();
 	strcpy_s(file_name, get_input_name(Binary, Enter));
+	book* book_list;
 
 	if (fopen_s(&file, file_name, "wbx") != NULL)
 	{
-		//book* book_list = get_sort_book_list_in_alphabet();
-		get_sort_book_function = get_book_sort(sort_type);
-		book* book_list = get_sort_book_function();
+		book* book_list = get_book_list();
 		if (book_list == NULL)
 		{
-			cout << file_name << ".dat is empty" << endl;
+			if (book_list == NULL)
+			{
+				cout << file_name << ".dat is empty" << endl;
+				fclose(file);
+				return OpenMenu;
+			}
+		}
+
+		get_search_book_function = get_book_search(search_type);
+		char* title = get_search_book_function();
+		
+		if (title == NULL)
+		{
+			cout << "There are no books with 1575 pages in the file " << file_name << endl;
 			fclose(file);
 			return OpenMenu;
 		}
-
-		cout << endl;
-		cout << "Result: " << endl;
-		for (int i = 0; i < n; i++)
-		{
-			if (book_list[i].year < 1990)
-			{
-				cout << book_list[i].title << endl;
-			}
-		}
-		cout << endl;
+		//cout << (title[strlen(title)] == '\0') << endl;
+		puts(title);
+		
 		fclose(file);
+
 		delete[] book_list;
 		return OpenMenu;
 	}
@@ -550,19 +504,19 @@ int show_result_on_screen(sort_type sort_type)
 	}
 }
 
-int show_result_in_file(sort_type sort_type)
+int show_result_in_file(search_type search_type)
 {
-	book* (*get_sort_book_function)();
+	char* (*get_sort_book_function)();
 	strcpy_s(file_name, get_input_name(Binary, Enter));
 
 	if (fopen_s(&file, file_name, "wbx") != NULL)
 	{
 		//book* book_list = get_sort_book_list_in_alphabet();
-		get_sort_book_function = get_book_sort(sort_type);
-		book* book_list = get_sort_book_function();
-		if (book_list == NULL)
+		get_sort_book_function = get_book_search(search_type);
+		char* title = get_sort_book_function();
+		if (title == NULL)
 		{
-			cout << file_name << " is empty" << endl;
+			cout << "There are no books with 1575 pages in the file " << file_name << endl;
 			fclose(file);
 			return OpenMenu;
 		}
@@ -573,7 +527,7 @@ int show_result_in_file(sort_type sort_type)
 		if (fopen_s(&result_file, result_file_name, "wtx") != NULL)
 		{
 			fopen_s(&file, result_file_name, "at");
-			for (int i = 0; i < n; i++)
+			/*for (int i = 0; i < n; i++)
 			{
 				if (book_list[i].year < 1990)
 				{
@@ -581,7 +535,7 @@ int show_result_in_file(sort_type sort_type)
 				}
 			}
 
-			delete[] book_list;
+			delete[] book_list;*/
 
 			cout << "Data from " << file_name << ".dat has been output in " << result_file_name << ".txt successfully" << endl;
 
@@ -613,20 +567,18 @@ int show_result_in_file(sort_type sort_type)
 				else
 				{
 					cout << "File " << result_file_name << " created successfully" << endl;
-
-					get_sort_book_function = get_book_sort(sort_type);
-					book* book_list = get_sort_book_function();
-					if (book_list == NULL)
+					get_sort_book_function = get_book_search(search_type);
+					char* title = get_sort_book_function();
+					if (title == NULL)
 					{
+						cout << "There are no books with 1575 pages in the file " << file_name << endl;
 						fclose(file);
-						fclose(result_file);
-						return 1;
+						return OpenMenu;
 					}
-						
 
 					cout << endl;
 
-					for (int i = 0; i < n; i++)
+					/*for (int i = 0; i < n; i++)
 					{
 						if (book_list[i].year < 1990)
 						{
@@ -634,7 +586,7 @@ int show_result_in_file(sort_type sort_type)
 						}
 					}
 
-					delete[] book_list;
+					delete[] book_list;*/
 
 				}
 				fclose(file);
@@ -700,8 +652,8 @@ int open_menu()
 	case Create: create_file(); break;
 	case Enter: enter_in_file(); break;
 	case OpenAndRead: open_and_read_file(); break;
-	case ShowResultOnScreen: choose_sort_type(ShowResultOnScreen); break;
-	case ShowResultInFile: choose_sort_type(ShowResultInFile); break;
+	case ShowResultOnScreen: choose_search_type(ShowResultOnScreen); break;
+	case ShowResultInFile: choose_search_type(ShowResultInFile); break;
 	case DeleteFile: delete_files(); break;
 	case FinishProgram: return 0; break;
 	default: cout << "There is no such option, please select another one" << endl; break;
