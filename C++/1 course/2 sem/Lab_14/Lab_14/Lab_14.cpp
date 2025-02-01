@@ -188,8 +188,13 @@ struct list
 		else
 			return false;
 	}
-};
 
+	void delete_list()
+	{
+		while (!is_empty())
+			pop();
+	}
+};
 
 
 int main()
@@ -238,6 +243,9 @@ int main()
 	s.print();
 	cout << "Result: ";
 	s_2.print();
+
+	s.delete_list();
+	s_2.delete_list();
 	delete el_min;
 	delete el_max;
 }
