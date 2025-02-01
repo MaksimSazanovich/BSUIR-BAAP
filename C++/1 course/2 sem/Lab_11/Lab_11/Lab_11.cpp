@@ -355,29 +355,6 @@ int open_and_read_file()
 
 }
 
-book* get_sort_book_list_in_alphabet()
-{
-	book* book_list = get_book_list();
-	if (book_list == NULL)
-		return NULL;
-
-	book temp;
-	for (int i = 0; i < n - 1; i++)
-	{
-		for (int j = i + 1; j < n; j++)
-		{
-			if (strcmp(book_list[i].title, book_list[j].title) == 1 && book_list[i].year < 1990 && book_list[j].year < 1990)
-			{
-				temp = book_list[i];
-				book_list[i] = book_list[j];
-				book_list[j] = temp;
-			}
-		}
-	}
-
-	return book_list;
-}
-
 book* get_sort_book_list_quick_sort()
 {
 	book* book_list = get_book_list();
