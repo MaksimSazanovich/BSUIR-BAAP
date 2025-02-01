@@ -102,6 +102,12 @@ struct stack
 	{
 		cout << el->inf << endl;
 	}
+
+	void delete_stack()
+	{
+		while (!is_empty())
+			pop();
+	}
 };
 
 int main()
@@ -137,6 +143,7 @@ int main()
 		cur = cur->next_adress->next_adress;
 	}
 	s.print();
+	s.delete_stack();
 
 	return 0;
 }
