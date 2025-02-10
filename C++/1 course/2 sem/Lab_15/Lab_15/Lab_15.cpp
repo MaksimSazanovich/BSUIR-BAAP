@@ -100,6 +100,25 @@ struct tree
 			parent->right = new_node;
 	}
 
+	tnode* add_balanced_tree(int left, int right, int* array)
+	{
+		tnode* node;
+		int m;
+
+		if (left > right)
+			return nullptr;
+
+		m = (left + right) / 2;
+
+		node = new tnode;
+		node->inf = array[m];
+
+		node->left = add_balanced_tree(left, m - 1, array);
+		node->right = add_balanced_tree(m + 1, right, array);
+
+		return node;
+	}
+
 	void pop(int x)
 	{
 		tnode* node = root;
@@ -151,13 +170,31 @@ struct tree
 		delete node;
 	}
 
-	void print(tnode* node)
+	void print_reverse(tnode* node)
 	{
 		if (!node)
 			return;
-		print(node->left);
+		print_reverse(node->left);
 		cout << node->inf << " ";
-		print(node->right);
+		print_reverse(node->right);
+	}
+
+	void print_straight(tnode* node)
+	{
+		if (!node)
+			return;
+		cout << node->inf << " ";
+		print_straight(node->left);
+		print_straight(node->right);
+	}
+
+	void print_trail(tnode* node)
+	{
+		if (!node)
+			return;
+		print_trail(node->left);
+		print_trail(node->right);
+		cout << node->inf << " ";
 	}
 
 	void print_node(int key)
@@ -217,16 +254,18 @@ struct tree
 int main()
 {
 	tree tree;
-	int n;
-	int e;
-	cout << "Enter count of element ";
-	cin >> n;
-	for (int i = 0; i < n; i++)
-	{
-		cout << "Enter element ";
-		cin >> e;
-		tree.push(e);
-	}
+	//int n;
+	//int e;
+	//cout << "Enter count of element ";
+	//cin >> n;
+	//for (int i = 0; i < n; i++)
+	//{
+	//	cout << "Enter element ";
+	//	cin >> e;
+	//	tree.push(e);
+	//}
+	
+	
 	// 3 1 21 10 42
 	//n = rand() % 30;
 	//cout << "n " << n << endl;
@@ -235,8 +274,15 @@ int main()
 	//	tree.push(rand() % 46);
 	//}
 
-	
-	tree.print(tree.root);
+	int array[] = { 1, 3, 5, 6, 8 };
+	int n = sizeof(array) / sizeof(array[0]);
+	tree.root = tree.add_balanced_tree(0, n-1, array);
+
+	tree.print_reverse(tree.root);
+	cout << endl;
+	tree.print_straight(tree.root);
+	cout << endl;
+	tree.print_trail(tree.root);
 	cout << endl;
 	dump4(tree.root, false);
 	cout << endl;
