@@ -3,17 +3,17 @@
 using namespace std;
 
 double multiply(int n);
-double multiply_non_req(int n);
-
-int fact(int n);
-int fizz_buzz_sum(int n);
+double multiply_not_rec(int n);
+int m(int a, int b);
 
 int main()
 {
-	int n;
-	cin >> n;
-	cout << multiply(n) << endl;
-	cout << multiply_non_req(n) << endl;
+	//int n;
+	//cout << "Enter n: ";
+	//cin >> n;
+	//cout << "Rec: " << multiply(n) << endl;
+	//cout << "Not a rec: " << multiply_not_rec(n) << endl;
+	cout << m(3, 5);
 }
 
 double multiply(int n)
@@ -30,7 +30,7 @@ double multiply(int n)
 	}
 }
 
-double multiply_non_req(int n)
+double multiply_not_rec(int n)
 {
 	double res = 1;
 	if (n <= 1)
@@ -41,28 +41,16 @@ double multiply_non_req(int n)
 		{
 			if (i % 2 != 0)
 				continue;
-			res *= (double)i / (i - 1) * (double)i / (i + 1);
+			res *= (double)((i * i) / (double)(i * i - 1));
 		}
 	}
 
 	return res;
 }
 
-int fact(int n)
+int m(int a, int b)
 {
-	if (n <= 0)
-		return 1;
-	else return n * fact(n - 1);
+	if (b == 1) return a;
+	return a + m(a, b-1);
 }
 
-int fizz_buzz_sum(int n)
-{
-	n--;
-	if (n < 3)
-		return 0;
-	if (n == 3)
-		return 3;
-	else if (n % 3 == 0 || n % 5 == 0)
-		return n + fizz_buzz_sum(n);
-	else return fizz_buzz_sum(n);
-}
