@@ -355,6 +355,29 @@ int open_and_read_file()
 
 }
 
+book* get_sort_book_list_in_alphabet()
+{
+	book* book_list = get_book_list();
+	if (book_list == NULL)
+		return NULL;
+
+	book temp;
+	for (int i = 0; i < n - 1; i++)
+	{
+		for (int j = i + 1; j < n; j++)
+		{
+			if (strcmp(book_list[i].title, book_list[j].title) == 1 && book_list[i].year < 1990 && book_list[j].year < 1990)
+			{
+				temp = book_list[i];
+				book_list[i] = book_list[j];
+				book_list[j] = temp;
+			}
+		}
+	}
+
+	return book_list;
+}
+
 book* get_sort_book_list_quick_sort()
 {
 	book* book_list = get_book_list();
@@ -398,6 +421,72 @@ void swap(book& a, book& b)
 	book temp = a;
 	a = b;
 	b = temp;
+}
+
+
+struct St 
+{
+	int l;
+	int r;
+} stack[20];
+void push(int l, int r, int& s)
+{
+	stack[s].l = l;
+	stack[s].r = r;
+	s++;
+}
+void pop(int& l, int& r, int& s) 
+{
+	s--;
+	l = stack[s].l;
+	r = stack[s].r;
+}
+book* get_sort_book_list_non_rec_quick_sort() 
+{
+	book* book_list = get_book_list();
+	if (book_list == NULL)
+		return NULL;
+
+	int i, j, left, right, s = 0;
+	book x;
+	push(0, n - 1, s);
+	while (s != -1) 
+	{
+		pop(left, right, s);
+		while (left < right) 
+		{
+			i = left;
+			j = right; 
+			x = book_list[(left + right) / 2];
+			while (i <= j) 
+			{
+				while (book_list[i].count_pages < x.count_pages)
+					i++;
+				while (book_list[j].count_pages > x.count_pages)
+					j--;
+				if (i <= j) 
+				{ 
+					swap(book_list[i], book_list[j]);
+					i++; 
+					j--; 
+				}
+			}
+			if ((j - left) < (right - i)) 
+			{ 
+				if (i < right) 
+					push(i, right, s);
+				right = j;
+			}
+			else 
+			{
+				if (left < j) 
+					push(left, j, s);
+				left = i;
+			}
+		}
+	}
+
+	return book_list;
 }
 
 book* get_sort_book_list_selection_sort()
@@ -458,7 +547,7 @@ void choose_sort_type(options result)
 		cout << "1) Bubble sort (in alphabetical order)\n"
 			 << "2) QuickSort (in non - decreasing order of number of pages)\n"
 			 << "3) Selection sort (in non - decreasing order of number of pages)\n"
-			 << "4) Insertion sort (in non - decreasing order of number of pages)" << endl;
+			 /* << "4) Insertion sort (in non - decreasing order of number of pages)" */<< endl;
 		cin >> k;
 		cur_sort_type = atoi(k);
 		if ((cur_sort_type < (int)BubbleSort || cur_sort_type >(int)InsertionSort) || !strcmp(k, " "))
@@ -482,7 +571,7 @@ book* (*get_book_sort(sort_type sort_type))()
 	case BubbleSort:
 		return &get_sort_book_list_in_alphabet;
 	case QuickSort:
-		return &get_sort_book_list_quick_sort;
+		return &get_sort_book_list_non_rec_quick_sort;
 	case SelectionSort:
 		return &get_sort_book_list_selection_sort;
 	case InsertionSort:

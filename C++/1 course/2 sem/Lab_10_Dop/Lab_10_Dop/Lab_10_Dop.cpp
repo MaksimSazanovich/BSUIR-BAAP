@@ -1,7 +1,5 @@
-﻿
-#include <iostream>
+﻿#include <iostream>
 using namespace std;
-//12 = 1*2^3 + 1*2^2 + 0*2^1 + 0*2^0
 
 
 char* convertToSystem(int num, int system);
@@ -42,7 +40,7 @@ char* convertToSystem(int num, int system)
     else
     {
         char remainder[2];
-        int a = _itoa_s(num % system, remainder, sizeof(remainder), 10);
+        _itoa_s(num % system, remainder, sizeof(remainder), 10);
         strcat_s(str, remainder);
         
         return convertToSystem(num / system , system);
