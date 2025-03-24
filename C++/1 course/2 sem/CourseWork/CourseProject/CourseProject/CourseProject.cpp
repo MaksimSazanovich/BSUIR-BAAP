@@ -13,63 +13,47 @@ double simple_interation_method(double a, double b);
 double newton_method(double a, double b);
 double parabola_method(double a, double b);
 
+void print_roots(double root1, double root2, double root3);
+
 int main()
 {
 	int a = 3;
 	int b = 9;
 	double root1 = 0, root2 = 0, root3 = 0;
-	int method;
-	do
+
+	cout << "Simple iteration method:" << endl;
+	root1 = simple_interation_method(a, b);
+	root2 = simple_interation_method(root1 + EPSILON, b);
+	root3 = simple_interation_method(root2 + EPSILON, b);
+	print_roots(root1, root2, root3);
+
+
+	cout << "Newton method:" << endl;
+	root1 = newton_method(a, b);
+	root2 = newton_method(root1 + EPSILON, b);
+	root3 = newton_method(root2 + EPSILON, b);
+	print_roots(root1, root2, root3);
+
+	cout << "Parabola method:" << endl;
+	root1 = parabola_method(a, b);
+	root2 = parabola_method(root1 + EPSILON, b);
+	root3 = parabola_method(root2 + EPSILON, b);
+	print_roots(root1, root2, root3);
+}
+
+void print_roots(double root1, double root2, double root3)
+{
+	if (isnan(root1) || isnan(root2) || isnan(root3))
 	{
-		cout << "Choose a method:\n1. Simple iteration method\n2. Newton's method\n3. Parabola method\n0. Exit" << endl;
-		cin >> method;
-		switch (method)
-		{
-			case 1:
-			{
-				root1 = simple_interation_method(a, b);
-				root2 = simple_interation_method(root1 + EPSILON, b);
-				root3 = simple_interation_method(root2 + EPSILON, b);
-			}
-			break;
-			case 2:
-			{
-				root1 = newton_method(a, b);
-				root2 = newton_method(root1 + EPSILON, b);
-				root3 = newton_method(root2 + EPSILON, b);
-			}
-			break;
-			case 3:
-			{
-				root1 = parabola_method(a, b);
-				root2 = parabola_method(root1 + EPSILON, b);
-				root3 = parabola_method(root2 + EPSILON, b);
-			}
-			break;
-			case 0:
-				return 0;
-			default:
-			{
-				cout << "Invalid choice. Try again" << endl;
-				continue;
-			}
-		}
-
-		if (isnan(root1) || isnan(root2) || isnan(root3)) 
-		{
-			cout << "Unable to find all three roots.\n";
-		}
-		else
-		{
-			cout << "Root 1: " << root1 << endl; 
-			cout << "Root 2: " << root2 << endl; 
-			cout << "Root 3: " << root3 << endl;
-		}
+		cout << "Unable to find all three roots.\n";
+	}
+	else
+	{
+		cout << "Root 1: " << root1 << endl;
+		cout << "Root 2: " << root2 << endl;
+		cout << "Root 3: " << root3 << endl;
 		cout << endl;
-
-	} while (true);
-
-	return 0;
+	}
 }
 
 double phi(double x)
