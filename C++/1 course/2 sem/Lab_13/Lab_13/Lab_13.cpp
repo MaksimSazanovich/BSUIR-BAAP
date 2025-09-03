@@ -8,7 +8,7 @@ struct element
 	element* next_adress;
 };
 
-struct stack
+struct stacka
 {
 	element* top = nullptr;
 	int size = 0;
@@ -112,7 +112,7 @@ struct stack
 
 int main()
 {
-	stack s;
+	stacka s;
 	int n;
 	int e;
 	cout << "Enter count of element ";

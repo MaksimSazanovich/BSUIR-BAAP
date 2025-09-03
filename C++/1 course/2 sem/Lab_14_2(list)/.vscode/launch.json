@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true, // Отключает внешнюю консоль, использует встроенную
+            "MIMode": "lldb", // Использует LLDB (для macOS), можно заменить на "gdb" для Linux/Windows
+            "logging": {
+                "engineLogging": false, // Отключает отладочные сообщения от движка
+                "moduleLoad": false,
+                "trace": false // Отключает сообщения о загрузке модулей
+            },
+            "targetArchitecture": "arm64",
+            "setupCommands": [
+    {
+        "description": "Disable module loading messages",
+        "text": "settings set target.process.stop-on-sharedlibrary-events false"
+    },
+    {
+        "description": "Disable symbol loading messages",
+        "text": "settings set target.load-script-from-symbol-file false"
+    }
+]
+        }
+    ]
+}
